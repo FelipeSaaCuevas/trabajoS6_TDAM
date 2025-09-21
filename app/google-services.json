@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "8212444163",
+    "project_id": "basededatos-dd724",
+    "storage_bucket": "basededatos-dd724.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8212444163:android:665832bcc070773c640a36",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB_j3b_UAUtSjmJRQJarg6gpd3o8XQzlg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
