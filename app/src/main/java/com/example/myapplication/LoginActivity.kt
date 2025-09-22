@@ -11,13 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 class LoginActivity : AppCompatActivity() {
-
-    private lateinit var T1: EditText
-    private lateinit var T2: EditText
-    private lateinit var b1: Button
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +24,16 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        T1 = findViewById(R.id.t1)  // Usuario
-        T2 = findViewById(R.id.t2)  // Contraseña
-        b1 = findViewById(R.id.b1)  // Botón login
+        val T1 = findViewById<EditText>(R.id.t1)  // Usuario
+        val T2 = findViewById<EditText>(R.id.t2)  // Contraseña
+        val b1 = findViewById<Button>(R.id.b1)    // Botón login
 
         b1.setOnClickListener {
             val usuario = T1.text.toString().trim()
             val clave = T2.text.toString().trim()
 
             if (usuario.isEmpty() || clave.isEmpty()) {
-                Toast.makeText(this, "Ingrese un usuario y/o contraseña", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ingrese un usuario o contraseña", Toast.LENGTH_SHORT).show()
             } else {
                 loginUser(usuario, clave)
             }
@@ -57,8 +51,9 @@ class LoginActivity : AppCompatActivity() {
                 if (!documents.isEmpty) {
                     Toast.makeText(this, "Login exitoso", Toast.LENGTH_SHORT).show()
 
-                    // Abrir otra Activity después del login
+                    //esto se usa para pasar el usuario para la otra pagina
                     val intent = Intent(this, MenuActivity::class.java)
+                    intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     finish()
                 } else {
@@ -69,6 +64,4 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
-
 }
-
