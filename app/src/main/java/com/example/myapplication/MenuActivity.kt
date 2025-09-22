@@ -1,110 +1,64 @@
 package com.example.myapplication
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class MenuActivity : AppCompatActivity() {
-    //esto se usa para declara las variables y usarlas luego
-    lateinit var fusedLocationClient: FusedLocationProviderClient
-    var latitude: Double? = null
-    var longitude: Double? = null
-    lateinit var textView: TextView
-    lateinit var usuario: String
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                obtenerUbicacion()
-            } else {
-                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show()
-            }
-        }
+    private lateinit var textUsuario: TextView
+    private lateinit var textUbicacion: TextView
+    private lateinit var database: DatabaseReference
+    private lateinit var email: String
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        textView = findViewById<TextView>(R.id.t3)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        textUsuario = findViewById(R.id.textUsuario)
+        textUbicacion = findViewById(R.id.textUbicacion)
 
-        // Recuperar el nombre de usuario enviado desde LoginActivity
-        usuario = intent.getStringExtra("usuario") ?: ""
-        verificarPermisoUbicacion()
+        // Recuperar correo enviado desde LoginActivity
+        email = intent.getStringExtra("usuario") ?: "Sin usuario"
+        textUsuario.text = "Bienvenido: $email"
+
+        // Inicializar Realtime Database
+        database = FirebaseDatabase.getInstance().reference
+
+        // Mostrar última ubicación guardada
+        cargarUltimaUbicacion()
     }
 
-    private fun verificarPermisoUbicacion() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            obtenerUbicacion()
-        } else {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-    }
+    private fun cargarUltimaUbicacion() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-    @SuppressLint("MissingPermission")
-    private fun obtenerUbicacion() {
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                latitude = location.latitude
-                longitude = location.longitude
-                textView.text = "Lat: $latitude, Lon: $longitude"
+        val userRef = database.child("usuarios").child(userId).child("ubicaciones")
 
-                // Guardar coordenadas en el Firestore
-                guardarCoordenadasEnFirestore()
-            } else {
-                Toast.makeText(this, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+        // Traer solo el último nodo de ubicaciones
+        userRef.limitToLast(1).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (ubicacionSnap in snapshot.children) {
+                        val lat = ubicacionSnap.child("lat").getValue(Double::class.java)
+                        val lon = ubicacionSnap.child("lon").getValue(Double::class.java)
 
-    private fun guardarCoordenadasEnFirestore() {
-        val db = FirebaseFirestore.getInstance()
-
-        if (latitude != null && longitude != null && usuario.isNotEmpty()) {
-            val coord = mapOf(
-                "lat" to latitude,
-                "lon" to longitude
-            )
-
-            // Buscar el documento del usuario en la colección "usuarios"
-            db.collection("usuarios")
-                .whereEqualTo("Nombre", usuario)
-                .get()
-                .addOnSuccessListener { documents ->
-                    if (!documents.isEmpty) {
-                        for (document in documents) {
-                            db.collection("usuarios")
-                                .document(document.id)
-                                .update("cordenadas", FieldValue.arrayUnion(coord))
-                                .addOnSuccessListener {
-                                    Toast.makeText(this, "Coordenada guardada", Toast.LENGTH_SHORT).show()
-                                }
-                                .addOnFailureListener { e ->
-                                    Toast.makeText(this, "Error al guardar: ${e.message}", Toast.LENGTH_SHORT).show()
-                                }
+                        if (lat != null && lon != null) {
+                            textUbicacion.text = "Última ubicación:\nLat: $lat\nLon: $lon"
                         }
-                    } else {
-                        Toast.makeText(this, "Usuario no encontrado en Firestore", Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    textUbicacion.text = "No hay ubicación guardada"
                 }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-        }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MenuActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
-

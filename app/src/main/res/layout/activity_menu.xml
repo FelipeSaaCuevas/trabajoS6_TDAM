@@ -8,18 +8,21 @@
     tools:context=".MenuActivity">
 
     <TextView
-        android:id="@+id/t3"
+        android:id="@+id/textUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="171dp"
-        android:layout_marginTop="259dp"
-        android:layout_marginEnd="183dp"
-        android:layout_marginBottom="453dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Bienvenido:"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="159dp"
+        tools:layout_editor_absoluteY="163dp" />
 
+    <TextView
+        android:id="@+id/textUbicacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Última ubicación:"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="144dp"
+        tools:layout_editor_absoluteY="246dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
