@@ -19,8 +19,8 @@ class MenuActivity : AppCompatActivity() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     var latitude: Double? = null
     var longitude: Double? = null
-    private lateinit var textView: TextView
-    private lateinit var usuario: String
+    lateinit var textView: TextView
+    lateinit var usuario: String
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -35,7 +35,7 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        textView = findViewById(R.id.t3)
+        textView = findViewById<TextView>(R.id.t3)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Recuperar el nombre de usuario enviado desde LoginActivity
