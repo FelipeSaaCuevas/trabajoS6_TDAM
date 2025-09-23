@@ -11,33 +11,39 @@
         android:id="@+id/t1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="112dp"
         android:ems="10"
-        android:inputType="textEmailAddress"
         android:hint="Correo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/t2"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="20dp"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.818" />
 
     <EditText
         android:id="@+id/t2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:ems="10"
-        android:inputType="textPassword"
         android:hint="Contraseña"
-        app:layout_constraintTop_toBottomOf="@+id/t1"
-        app:layout_constraintStart_toStartOf="parent"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="20dp"/>
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="121dp" />
 
     <Button
         android:id="@+id/b1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
         android:text="Iniciar Sesión"
-        app:layout_constraintTop_toBottomOf="@+id/t2"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

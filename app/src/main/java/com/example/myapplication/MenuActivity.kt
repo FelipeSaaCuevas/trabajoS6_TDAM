@@ -10,36 +10,35 @@ import com.google.firebase.database.*
 
 class MenuActivity : AppCompatActivity() {
 
-    private lateinit var textUsuario: TextView
-    private lateinit var textUbicacion: TextView
-    private lateinit var database: DatabaseReference
-    private lateinit var email: String
+    lateinit var textUbicacion: TextView
+    lateinit var database: DatabaseReference
+    lateinit var email: String
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        textUsuario = findViewById(R.id.textUsuario)
+        val textUsuario = findViewById<TextView>(R.id.textUsuario)
+
         textUbicacion = findViewById(R.id.textUbicacion)
 
-        // Recuperar correo enviado desde LoginActivity
+        //recupera el email del loginActivity
         email = intent.getStringExtra("usuario") ?: "Sin usuario"
         textUsuario.text = "Bienvenido: $email"
 
-        // Inicializar Realtime Database
+
         database = FirebaseDatabase.getInstance().reference
 
-        // Mostrar última ubicación guardada
-        cargarUltimaUbicacion()
+        CargarLaUltimaUbicacion()
     }
 
-    private fun cargarUltimaUbicacion() {
+    private fun CargarLaUltimaUbicacion() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         val userRef = database.child("usuarios").child(userId).child("ubicaciones")
 
-        // Traer solo el último nodo de ubicaciones
+
         userRef.limitToLast(1).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {

@@ -11,18 +11,22 @@
         android:id="@+id/textUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="163dp"
+        android:layout_marginEnd="160dp"
         android:text="Bienvenido:"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="163dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textUbicacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Última ubicación:"
+        android:layout_marginEnd="200dp"
+        android:layout_marginBottom="440dp"
+        android:text="su ultima ubicacion es:"
         android:textSize="16sp"
-        tools:layout_editor_absoluteX="144dp"
-        tools:layout_editor_absoluteY="246dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

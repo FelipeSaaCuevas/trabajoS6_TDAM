@@ -18,20 +18,17 @@ import com.google.firebase.database.FirebaseDatabase
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    // se usa el leteinit par colocar las variables sinntener que declaralas
+     lateinit var auth: FirebaseAuth
+     lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private lateinit var T1: EditText
-    private lateinit var T2: EditText
-    private lateinit var b1: Button
-
-    private val requestPermissionLauncher =
+    val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 obtenerUbicacionYGuardar()
             } else {
                 Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show()
-                irAMenu() // aunque no guarde la ubicación, sigue a MenuActivity
+                irAMenu()
             }
         }
 
@@ -42,9 +39,9 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        T1 = findViewById(R.id.t1)
-        T2 = findViewById(R.id.t2)
-        b1 = findViewById(R.id.b1)
+        val T1 = findViewById<EditText>(R.id.t1)
+        val T2 = findViewById<EditText>(R.id.t2)
+        val b1 = findViewById<Button>(R.id.b1)
 
         b1.setOnClickListener {
             val email = T1.text.toString().trim()
@@ -58,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun loginUser(email: String, clave: String) {
+   fun loginUser(email: String, clave: String) {
         auth.signInWithEmailAndPassword(email, clave)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -69,7 +66,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
-
     private fun verificarPermisoUbicacion() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -110,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun irAMenu() {
+    fun irAMenu() {
         val email = auth.currentUser?.email ?: ""  // obtenemos el correo del usuario autenticado
         val intent = Intent(this, MenuActivity::class.java)
         intent.putExtra("usuario", email)  // lo enviamos a MenuActivity
